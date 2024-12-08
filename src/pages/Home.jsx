@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import api from '../services/api';
 import { jwtDecode } from "jwt-decode";
 import ExerciseSelector from '../components/ExerciseSelector';
+import { useNavigate } from 'react-router-dom';
+import WorkoutInfo from '../components/WorkoutInfo';
 
 const Home = () => {
     const [workouts, setWorkouts] = useState([]);
@@ -15,11 +17,13 @@ const Home = () => {
         date: '',
         exercises: [],
     });
+    const navigate = useNavigate();
 
     const fetchWorkouts = async () => {
         try {
             const token = localStorage.getItem('token');
-            if (!token) throw new Error('Токен отсутствует. Пожалуйста, войдите в систему.');
+            if (!token)
+                navigate('/login');
 
             const decodedToken = jwtDecode(token);
             const userId = decodedToken.id;
@@ -27,8 +31,7 @@ const Home = () => {
             const response = await api.get(`/workouts?user_id=${userId}`, {
                 headers: { Authorization: `Bearer ${token}` },
             });
-
-            console.log(userId, response, token)
+            console.log(response.data)
             setWorkouts(response.data);
         } catch (err) {
             setError(err.message || 'Ошибка при загрузке тренировок');
@@ -38,6 +41,14 @@ const Home = () => {
     };
 
     const handleAddWorkout = async () => {
+        const { type, date, exercises } = newWorkout;
+
+        // Проверяем, что все поля заполнены
+        if (!type || !date || exercises.length === 0) {
+            alert('Пожалуйста, заполните все поля перед добавлением тренировки.');
+            return;
+        }
+
         try {
             const token = localStorage.getItem('token');
             if (!token) throw new Error('Токен отсутствует. Пожалуйста, войдите в систему.');
@@ -45,15 +56,16 @@ const Home = () => {
             const decodedToken = jwtDecode(token);
             const userId = decodedToken.id;
 
-            const response = await api.post(
+            // Преобразуем упражнения в массив их идентификаторов
+            const exerciseIds = exercises.map((exercise) => exercise.id);
+
+            await api.post(
                 '/workouts',
-                { user_id: userId, ...newWorkout },
-                {
-                    headers: { Authorization: `Bearer ${token}` },
-                }
+                { user_id: userId, type, date, exercises: exerciseIds },
+                { headers: { Authorization: `Bearer ${token}` } }
             );
 
-            setWorkouts([...workouts, response.data]);
+            setWorkouts([...workouts, { ...newWorkout }]);
             setIsModalOpen(false);
             setNewWorkout({ title: '', description: '', type: '', date: '', exercises: [] });
         } catch (err) {
@@ -61,9 +73,13 @@ const Home = () => {
         }
     };
 
+    const handleDeleteWorkout = (deletedWorkoutId) => {
+        setWorkouts(workouts.filter(w => w.id !== deletedWorkoutId));
+    };
+
     useEffect(() => {
         fetchWorkouts();
-    }, []);
+    }, [newWorkout]);
 
     if (loading) return <p>Загрузка...</p>;
     if (error) return <p>{error}</p>;
@@ -76,13 +92,9 @@ const Home = () => {
             ) : (
                 <ul>
                     {workouts.map((workout) => (
-                        <li key={workout.id}>
-                            <h2>{workout.title}</h2>
-                            <p>{workout.description}</p>
-                            <p>Тип: {workout.type}</p>
-                            <p>Дата: {workout.date}</p>
-                            <p>Упражнения: {workout.exercises}</p>
-                        </li>
+                        <div key={workout.id} className='workout'>
+                            <WorkoutInfo workout={workout} onUpdate={fetchWorkouts} onDelete={() => handleDeleteWorkout(workout.id)} />
+                        </div>
                     ))}
                 </ul>
             )}
@@ -91,30 +103,19 @@ const Home = () => {
                 <div style={modalStyle}>
                     <h2>Добавить тренировку</h2>
                     <label>
-                        Название:
-                        <input
-                            type="text"
-                            value={newWorkout.title}
-                            onChange={(e) => setNewWorkout({ ...newWorkout, title: e.target.value })}
-                        />
-                    </label>
-                    <label>
-                        Описание:
-                        <textarea
-                            value={newWorkout.description}
-                            onChange={(e) => setNewWorkout({ ...newWorkout, description: e.target.value })}
-                        />
-                    </label>
-                    <label>
                         Тип:
                         <select
                             value={newWorkout.type}
                             onChange={(e) => setNewWorkout({ ...newWorkout, type: e.target.value })}
                         >
                             <option value="">Выберите тип</option>
-                            <option value="cardio">Кардио</option>
-                            <option value="strength">Силовая</option>
-                            <option value="flexibility">Гибкость</option>
+                            <option value="Кардио">Кардио</option>
+                            <option value="Силовая">Силовая</option>
+                            <option value="Руки">Руки</option>
+                            <option value="Ноги">Ноги</option>
+                            <option value="Грудь">Грудь</option>
+                            <option value="Спина">Спина</option>
+                            <option value="Фулбади">Фулбади</option>
                         </select>
                     </label>
                     <label>

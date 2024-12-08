@@ -21,13 +21,15 @@ const ExerciseSelector = ({ selectedExercises, setSelectedExercises }) => {
         fetchExercises();
     }, []);
 
-    const toggleExercise = (exerciseId) => {
-        if (selectedExercises.includes(exerciseId)) {
-            setSelectedExercises(selectedExercises.filter((id) => id !== exerciseId));
+    const toggleExercise = (exercise) => {
+        if (selectedExercises.some((ex) => ex.id === exercise.id)) {
+            setSelectedExercises(selectedExercises.filter((ex) => ex.id !== exercise.id));
         } else {
-            setSelectedExercises([...selectedExercises, exerciseId]);
+            setSelectedExercises([...selectedExercises, exercise]);
         }
     };
+
+    const isExerciseSelected = (exerciseId) => selectedExercises.some((ex) => ex.id === exerciseId);
 
     if (loading) return <p>Загрузка списка упражнений...</p>;
     if (error) return <p>{error}</p>;
@@ -41,8 +43,8 @@ const ExerciseSelector = ({ selectedExercises, setSelectedExercises }) => {
                         <label>
                             <input
                                 type="checkbox"
-                                checked={selectedExercises.includes(exercise.id)}
-                                onChange={() => toggleExercise(exercise.id)}
+                                checked={isExerciseSelected(exercise.id)}
+                                onChange={() => toggleExercise(exercise)}
                             />
                             {exercise.name}
                         </label>
