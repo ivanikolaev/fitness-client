@@ -37,7 +37,7 @@ const ExerciseSelector = ({ selectedExercises, setSelectedExercises }) => {
     return (
         <div>
             <h3>Выберите упражнения:</h3>
-            <ul>
+            <ul style={{ display: 'flex', flexDirection: 'row' }}>
                 {exercises.map((exercise) => (
                     <li key={exercise.id}>
                         <label>
