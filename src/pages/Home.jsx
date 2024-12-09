@@ -97,7 +97,7 @@ const Home = () => {
             <h1>Мои тренировки</h1>
             <button className='logout' onClick={handleLogout}>Выйти</button>
             {workouts.length === 0 ? (
-                <p>У вас пока нет тренировок</p>
+                <p style={{ marginTop: '20px', fontSize: '20px' }}>У вас пока нет тренировок</p>
             ) : (
                 <ul>
                     {workouts.map((workout) => (

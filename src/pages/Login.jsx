@@ -24,7 +24,9 @@ const Login = () => {
             localStorage.setItem('token', data.token); // Сохраняем токен
             navigate('/'); // Перенаправление на главную страницу после входа
         } catch (err) {
-            setError(err);
+            // Проверяем, есть ли сообщение об ошибке в ответе
+            const errorMessage = err.response?.data?.message || 'Ошибка входа. Проверьте данные и попробуйте снова.';
+            setError(errorMessage);
         }
     };
 
