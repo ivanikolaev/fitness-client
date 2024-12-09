@@ -85,7 +85,7 @@ const Home = () => {
     if (error) return <p>{error}</p>;
 
     return (
-        <div>
+        <div className='workouts'>
             <h1>Мои тренировки</h1>
             {workouts.length === 0 ? (
                 <p>У вас пока нет тренировок</p>
@@ -98,57 +98,48 @@ const Home = () => {
                     ))}
                 </ul>
             )}
-            <button onClick={() => setIsModalOpen(true)}>Добавить тренировку</button>
+            <button className='add_workout' onClick={() => setIsModalOpen(true)}>Добавить тренировку</button>
             {isModalOpen && (
-                <div style={modalStyle}>
-                    <h2>Добавить тренировку</h2>
-                    <label>
-                        Тип:
-                        <select
-                            value={newWorkout.type}
-                            onChange={(e) => setNewWorkout({ ...newWorkout, type: e.target.value })}
-                        >
-                            <option value="">Выберите тип</option>
-                            <option value="Кардио">Кардио</option>
-                            <option value="Силовая">Силовая</option>
-                            <option value="Руки">Руки</option>
-                            <option value="Ноги">Ноги</option>
-                            <option value="Грудь">Грудь</option>
-                            <option value="Спина">Спина</option>
-                            <option value="Фулбади">Фулбади</option>
-                        </select>
-                    </label>
-                    <label>
-                        Дата:
-                        <input
-                            type="date"
-                            value={newWorkout.date}
-                            onChange={(e) => setNewWorkout({ ...newWorkout, date: e.target.value })}
+                <div className='modal'>
+                    <div className='modal_info'>
+                        <h2>Добавить тренировку</h2>
+                        <label>
+                            Тип:
+                            <select
+                                value={newWorkout.type}
+                                onChange={(e) => setNewWorkout({ ...newWorkout, type: e.target.value })}
+                            >
+                                <option value="">Выберите тип</option>
+                                <option value="Кардио">Кардио</option>
+                                <option value="Силовая">Силовая</option>
+                                <option value="Руки">Руки</option>
+                                <option value="Ноги">Ноги</option>
+                                <option value="Грудь">Грудь</option>
+                                <option value="Спина">Спина</option>
+                                <option value="Фулбади">Фулбади</option>
+                            </select>
+                        </label>
+                        <label>
+                            Дата:
+                            <input
+                                type="date"
+                                value={newWorkout.date}
+                                onChange={(e) => setNewWorkout({ ...newWorkout, date: e.target.value })}
+                            />
+                        </label>
+                        <ExerciseSelector
+                            selectedExercises={newWorkout.exercises}
+                            setSelectedExercises={(exercises) => setNewWorkout({ ...newWorkout, exercises })}
                         />
-                    </label>
-                    <ExerciseSelector
-                        selectedExercises={newWorkout.exercises}
-                        setSelectedExercises={(exercises) => setNewWorkout({ ...newWorkout, exercises })}
-                    />
-                    <button onClick={handleAddWorkout}>Добавить</button>
-                    <button onClick={() => setIsModalOpen(false)}>Отмена</button>
+                        <div className='modal_buttons'>
+                            <button onClick={handleAddWorkout}>Добавить</button>
+                            <button className='modal_cancel' onClick={() => setIsModalOpen(false)}>Отмена</button>
+                        </div>
+                    </div>
                 </div>
             )}
         </div>
     );
-};
-
-const modalStyle = {
-    position: 'fixed',
-    top: '50%',
-    left: '50%',
-    transform: 'translate(-50%, -50%)',
-    background: 'white',
-    padding: '20px',
-    borderRadius: '8px',
-    color: 'black',
-    boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
-    zIndex: 1000,
 };
 
 export default Home;

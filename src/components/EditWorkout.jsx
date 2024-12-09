@@ -52,7 +52,7 @@ const EditWorkout = ({ workout, onClose, onUpdate }) => {
 
     return (
         <div className="modal">
-            <div className="modal-content">
+            <div className="modal_info modal_edit">
                 <h2>Редактировать тренировку</h2>
                 <form onSubmit={handleSubmit}>
                     <label>
@@ -72,30 +72,36 @@ const EditWorkout = ({ workout, onClose, onUpdate }) => {
                         />
                     </label>
                     <h3>Упражнения</h3>
-                    {exercises.map((exercise, index) => (
-                        <div key={index}>
-                            <label>
-                                Упражнение: {exercise.name}
-                                <div>
-                                    <label>Вес:</label>
-                                    <input
-                                        type="number"
-                                        value={exercise.weight}
-                                        onChange={(e) => handleExerciseChange(index, 'weight', e.target.value)}
-                                    />
-                                    <label>Повторения:</label>
-                                    <input
-                                        type="number"
-                                        value={exercise.repetitions}
-                                        onChange={(e) => handleExerciseChange(index, 'repetitions', e.target.value)}
-                                    />
-                                </div>
-                            </label>
-                        </div>
-                    ))}
-                    <button type="submit">Сохранить изменения</button>
+                    <div className='exercises'>
+                        {exercises.map((exercise, index) => (
+                            <div key={index}>
+                                <label>
+                                    {exercise.name}
+                                    <div className='exercise'>
+                                        <label>Вес:
+                                            <input
+                                                type="number"
+                                                value={exercise.weight}
+                                                onChange={(e) => handleExerciseChange(index, 'weight', e.target.value)}
+                                            />
+                                        </label>
+                                        <label>Повторения:
+                                            <input
+                                                type="number"
+                                                value={exercise.repetitions}
+                                                onChange={(e) => handleExerciseChange(index, 'repetitions', e.target.value)}
+                                            />
+                                        </label>
+                                    </div>
+                                </label>
+                            </div>
+                        ))}
+                    </div>
+                    <div className='modal_edit_buttons'>
+                        <button type="submit">Сохранить изменения</button>
+                        <button className="cancel_button" onClick={onClose}>Закрыть</button>
+                    </div>
                 </form>
-                <button onClick={onClose}>Закрыть</button>
             </div>
         </div>
     );

@@ -6,10 +6,6 @@ function DeleteWorkout({ workout, onDelete }) {
     const [error, setError] = useState(null); // Для отображения ошибок
 
     const handleDeleteWorkout = async (id) => {
-        if (!window.confirm('Вы уверены, что хотите удалить эту тренировку?')) {
-            return;
-        }
-
         setLoading(true);
         setError(null);
 
@@ -31,8 +27,8 @@ function DeleteWorkout({ workout, onDelete }) {
 
     return (
         <div>
-            <button onClick={() => handleDeleteWorkout(workout.id)} disabled={loading}>
-                {loading ? 'Удаление...' : 'Удалить тренировку'}
+            <button className="delete_button" onClick={() => handleDeleteWorkout(workout.id)} disabled={loading}>
+                {loading ? 'Удаление...' : 'Удалить'}
             </button>
             {error && <p className="error">{error}</p>} {/* Показываем ошибку, если есть */}
         </div>

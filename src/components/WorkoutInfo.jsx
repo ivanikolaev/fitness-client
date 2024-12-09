@@ -26,22 +26,24 @@ const WorkoutInfo = ({ workout, onUpdate, onDelete }) => {
             <ul>
                 {workout.exercises.map((exercise) => (
                     <li key={exercise.id}>
-                        {exercise.name} — Вес: {exercise.weight} кг, Повторений: {exercise.repetitions}
+                        {exercise.name} — вес: {exercise.weight} кг, повторений: {exercise.repetitions}
                     </li>
                 ))}
             </ul>
+            <div className='workout_buttons'>
 
-            <button onClick={() => setIsModalOpen(true)}>Изменить</button>
+                <button onClick={() => setIsModalOpen(true)}>Изменить</button>
 
-            {isModalOpen && (
-                <EditWorkout
-                    workout={workout}
-                    onClose={handleCloseModal}
-                    onUpdate={handleUpdateWorkout}
-                />
-            )}
+                {isModalOpen && (
+                    <EditWorkout
+                        workout={workout}
+                        onClose={handleCloseModal}
+                        onUpdate={handleUpdateWorkout}
+                    />
+                )}
 
-            <DeleteWorkout workout={workout} onDelete={onDelete} />
+                <DeleteWorkout workout={workout} onDelete={onDelete} />
+            </div>
         </div>
     );
 };
