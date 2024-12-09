@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { register } from '../services/auth';
 
 const Register = () => {
@@ -31,11 +31,12 @@ const Register = () => {
     };
 
     return (
-        <div>
-            <h1>Регистрация</h1>
-            {error && <p style={{ color: 'red' }}>{error}</p>}
-            <form onSubmit={handleSubmit}>
+        <div className="login-container">
+            <h1 className="login-title">Регистрация</h1>
+            {error && <p className="login-error">{error}</p>}
+            <form className="login-form" onSubmit={handleSubmit}>
                 <input
+                    className="login-input"
                     type="text"
                     name="name"
                     placeholder="Имя"
@@ -44,6 +45,7 @@ const Register = () => {
                     required
                 />
                 <input
+                    className="login-input"
                     type="email"
                     name="email"
                     placeholder="Email"
@@ -52,6 +54,7 @@ const Register = () => {
                     required
                 />
                 <input
+                    className="login-input"
                     type="password"
                     name="password"
                     placeholder="Пароль"
@@ -60,6 +63,7 @@ const Register = () => {
                     required
                 />
                 <input
+                    className="login-input"
                     type="number"
                     name="height"
                     placeholder="Рост (см)"
@@ -68,6 +72,7 @@ const Register = () => {
                     required
                 />
                 <input
+                    className="login-input"
                     type="number"
                     name="weight"
                     placeholder="Вес (кг)"
@@ -75,8 +80,11 @@ const Register = () => {
                     onChange={handleChange}
                     required
                 />
-                <button type="submit">Зарегистрироваться</button>
+                <button className="login-button" type="submit">Зарегистрироваться</button>
             </form>
+            <div className="login-footer">
+                <p>Уже есть аккаунт? <Link to="/login" className="register-link">Войти</Link></p>
+            </div>
         </div>
     );
 };

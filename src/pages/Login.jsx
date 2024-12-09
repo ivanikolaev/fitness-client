@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { login } from '../services/auth';
 
 const Login = () => {
@@ -29,11 +29,12 @@ const Login = () => {
     };
 
     return (
-        <div>
-            <h1>Вход</h1>
-            {error && <p style={{ color: 'red' }}>{error}</p>}
-            <form onSubmit={handleSubmit}>
+        <div className="login-container">
+            <h1 className="login-title">Вход</h1>
+            {error && <p className="login-error">{error}</p>}
+            <form className="login-form" onSubmit={handleSubmit}>
                 <input
+                    className="login-input"
                     type="email"
                     name="email"
                     placeholder="Email"
@@ -42,6 +43,7 @@ const Login = () => {
                     required
                 />
                 <input
+                    className="login-input"
                     type="password"
                     name="password"
                     placeholder="Пароль"
@@ -49,8 +51,11 @@ const Login = () => {
                     onChange={handleChange}
                     required
                 />
-                <button type="submit">Войти</button>
+                <button className="login-button" type="submit">Войти</button>
             </form>
+            <div className="login-footer">
+                <p>Нет аккаунта? <Link to="/register" className="register-link">Зарегистрироваться</Link></p>
+            </div>
         </div>
     );
 };

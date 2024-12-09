@@ -40,6 +40,14 @@ const Home = () => {
         }
     };
 
+    const handleLogout = () => {
+        // Удаляем токен из localStorage
+        localStorage.removeItem('token');
+        
+        // Перенаправляем на страницу логина
+        navigate('/login');
+    };
+
     const handleAddWorkout = async () => {
         const { type, date, exercises } = newWorkout;
 
@@ -87,6 +95,7 @@ const Home = () => {
     return (
         <div className='workouts'>
             <h1>Мои тренировки</h1>
+            <button className='logout' onClick={handleLogout}>Выйти</button>
             {workouts.length === 0 ? (
                 <p>У вас пока нет тренировок</p>
             ) : (
