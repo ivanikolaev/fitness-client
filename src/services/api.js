@@ -2,7 +2,7 @@ import axios from 'axios';
 
 // Настройка базового URL для всех запросов
 const api = axios.create({
-    baseURL: 'https://fitness-server-tbwv.onrender.com/', // или URL вашего бекенда
+    baseURL: 'http://localhost:3000/', // или URL вашего бекенда
     headers: {
         'Content-Type': 'application/json',
     },

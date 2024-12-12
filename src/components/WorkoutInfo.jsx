@@ -20,13 +20,17 @@ const WorkoutInfo = ({ workout, onUpdate, onDelete }) => {
         <div className="workout_info">
             <h2>Тренировка: {workout.type}</h2>
             <p>Дата: {formattedDate}</p>
-            <p>Сожжено калорий: {totalCalories}</p>
+            <p>
+                Сожжено калорий: <span style={{ color: `${totalCalories < 1000 ? 'darkred' : 'green'}`, fontWeight: 'bold' }}>
+                    {totalCalories}
+                </span>
+            </p>
 
             <h3>Упражнения:</h3>
             <ul>
                 {workout.exercises.map((exercise) => (
                     <li key={exercise.id}>
-                        {exercise.name} — вес: {exercise.weight} кг, повторений: {exercise.repetitions}
+                        <b>{exercise.name}</b> — вес: {exercise.weight} кг, повторений: {exercise.repetitions}
                     </li>
                 ))}
             </ul>

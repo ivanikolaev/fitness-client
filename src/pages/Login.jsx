@@ -21,10 +21,9 @@ const Login = () => {
 
         try {
             const data = await login(formData);
-            localStorage.setItem('token', data.token); // Сохраняем токен
-            navigate('/'); // Перенаправление на главную страницу после входа
+            localStorage.setItem('token', data.token);
+            navigate('/');
         } catch (err) {
-            // Проверяем, есть ли сообщение об ошибке в ответе
             const errorMessage = err.response?.data?.message || 'Ошибка входа. Проверьте данные и попробуйте снова.';
             setError(errorMessage);
         }

@@ -35,15 +35,14 @@ const EditWorkout = ({ workout, onClose, onUpdate }) => {
                 }))
             };
 
-            // Отправляем обновленные данные на сервер
             const response = await api.put(`/workouts/${workout.id}`, updatedWorkout, {
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem('token')}`
                 }
             });
             if (response.status === 200) {
-                onUpdate(response.data.workout);  // Обновление состояния на родительском компоненте
-                onClose();  // Закрываем модальное окно
+                onUpdate(response.data.workout);
+                onClose();
             }
         } catch (error) {
             console.error('Ошибка при обновлении тренировки:', error);
@@ -57,11 +56,19 @@ const EditWorkout = ({ workout, onClose, onUpdate }) => {
                 <form onSubmit={handleSubmit}>
                     <label>
                         Тип тренировки:
-                        <input
-                            type="text"
+                        <select
                             value={type}
                             onChange={(e) => setType(e.target.value)}
-                        />
+                        >
+                            <option value="" disabled>Выберите тип</option>
+                            <option value="Кардио">Кардио</option>
+                            <option value="Силовая">Силовая</option>
+                            <option value="Руки">Руки</option>
+                            <option value="Ноги">Ноги</option>
+                            <option value="Грудь">Грудь</option>
+                            <option value="Спина">Спина</option>
+                            <option value="Фулбади">Фулбади</option>
+                        </select>
                     </label>
                     <label>
                         Дата:
@@ -98,7 +105,7 @@ const EditWorkout = ({ workout, onClose, onUpdate }) => {
                         ))}
                     </div>
                     <div className='modal_edit_buttons'>
-                        <button type="submit">Сохранить изменения</button>
+                        <button type="submit">Сохранить</button>
                         <button className="cancel_button" onClick={onClose}>Закрыть</button>
                     </div>
                 </form>

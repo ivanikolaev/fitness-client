@@ -24,7 +24,7 @@ const Register = () => {
 
         try {
             await register(formData);
-            navigate('/login'); // Перенаправление на страницу логина после успешной регистрации
+            navigate('/login');
         } catch (err) {
             setError(err);
         }
