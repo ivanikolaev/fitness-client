@@ -83,7 +83,7 @@ const EditWorkout = ({ workout, onClose, onUpdate }) => {
                         {exercises.map((exercise, index) => (
                             <div key={index}>
                                 <label>
-                                    {exercise.name}
+                                    <span style={{ fontWeight: 'bold', color: 'sandybrown' }}>{exercise.name}</span>
                                     <div className='exercise'>
                                         <label>Вес:
                                             <input

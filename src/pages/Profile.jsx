@@ -11,6 +11,7 @@ const Profile = () => {
     const [height, setHeight] = useState('');
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const [isModalOpen, setIsModalOpen] = useState(false);
     const navigate = useNavigate();
 
     const fetchProfile = async () => {
@@ -28,16 +29,35 @@ const Profile = () => {
             setWeight(response.data.weight);
             setHeight(response.data.height);
         } catch (err) {
-            setError(err.message || 'Ошибка при загрузке тренировок');
+            setError(err.message || 'Ошибка при загрузке профиля');
         } finally {
             setLoading(false);
+        }
+    };
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+
+        try {
+            const token = localStorage.getItem('token');
+
+            const userId = jwtDecode(token).id;
+            const email = jwtDecode(token).email;
+
+            await api.put(`/users/${userId}`, { name, email, weight, height }, {
+                headers: { Authorization: `Bearer ${token}` }
+            });
+            setIsModalOpen(false);
+            fetchProfile();
+        } catch (err) {
+            setError(err.message || 'Ошибка при обновлении профиля');
         }
     };
 
     useEffect(() => {
         fetchProfile();
     }, []);
-    
+
     if (loading) return <p>Загрузка...</p>;
     if (error) return <p>{error}</p>;
 
@@ -45,11 +65,35 @@ const Profile = () => {
         <>
             <Header title='Мой профиль' />
             <div className="profile-container">
-                <p>Имя: {name}</p>
-                <p>Вес: {weight} кг</p>
-                <p>Рост: {height} см</p>
-                <button>Редактировать</button>
+                <p><b>Имя:</b> {name}</p>
+                <p><b>Вес:</b> {weight} кг</p>
+                <p><b>Рост:</b> {height} см</p>
+                <button className='login-button' onClick={() => setIsModalOpen(true)}>Редактировать</button>
             </div>
+            {isModalOpen && (
+                <div className="modal">
+                    <div className="modal_info modal_edit modal_profile">
+                        <h2>Редактировать профиль</h2>
+                        <form onSubmit={handleSubmit}>
+                            <label>
+                                Имя:
+                                <input value={name} onChange={(e) => setName(e.target.value)} />
+                            </label>
+                            <label>Вес:
+                                <input type='number' value={weight} onChange={(e) => setWeight(e.target.value)} />
+                            </label>
+                            <label>
+                                Рост:
+                                <input type='number' value={height} onChange={(e) => setHeight(e.target.value)} />
+                            </label>
+                            <div className="modal_buttons">
+                                <button type="submit">Сохранить</button>
+                                <button className='modal_cancel' onClick={() => setIsModalOpen(false)}>Отмена</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            )}
         </>
     )
 }

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import api from '../services/api';
+import Select from 'react-select';
 
 const ExerciseSelector = ({ selectedExercises, setSelectedExercises }) => {
     const [exercises, setExercises] = useState([]);
@@ -9,7 +10,7 @@ const ExerciseSelector = ({ selectedExercises, setSelectedExercises }) => {
     useEffect(() => {
         const fetchExercises = async () => {
             try {
-                const response = await api.get('/exercises'); // Предполагается эндпоинт для получения упражнений
+                const response = await api.get('/exercises');
                 setExercises(response.data);
             } catch (err) {
                 setError(err.message || 'Ошибка при загрузке упражнений');
@@ -21,37 +22,68 @@ const ExerciseSelector = ({ selectedExercises, setSelectedExercises }) => {
         fetchExercises();
     }, []);
 
-    const toggleExercise = (exercise) => {
-        if (selectedExercises.some((ex) => ex.id === exercise.id)) {
-            setSelectedExercises(selectedExercises.filter((ex) => ex.id !== exercise.id));
-        } else {
-            setSelectedExercises([...selectedExercises, exercise]);
-        }
+    const handleSelectChange = (selectedOptions) => {
+        const selectedExercises = selectedOptions
+            ? selectedOptions.map((option) => ({
+                id: option.value,
+                name: option.label,
+            }))
+            : [];
+
+        setSelectedExercises(selectedExercises);
     };
 
-    const isExerciseSelected = (exerciseId) => selectedExercises.some((ex) => ex.id === exerciseId);
+    const exerciseOptions = exercises.map((exercise) => ({
+        value: exercise.id,
+        label: exercise.name,
+    }));
+
+    const styles = {
+        container: (base) => ({
+            ...base,
+            width: '100%',
+        }),
+        control: (base, state) => ({
+            ...base,
+            padding: '5px 10px',
+        }),
+        option: (base, state) => ({
+            ...base,
+            color: 'black',
+            cursor: 'pointer',
+        }),
+        multiValueRemove: (base, state) => ({
+            ...base,
+            color: 'red',
+            backgroundColor: '#c2e2ff',
+            ':hover': {
+                backgroundColor: '#ff818d',
+                color: 'white',
+            },
+        }),
+        multiValueLabel: (base, state) => ({
+            ...base,
+            color: 'black',
+            fontSize: '14px',
+            backgroundColor: '#c2e2ff',
+        })
+    }
 
     if (loading) return <p>Загрузка списка упражнений...</p>;
     if (error) return <p>{error}</p>;
 
     return (
-        <div>
-            <h3>Выберите упражнения:</h3>
-            <ul style={{ display: 'flex', flexDirection: 'row' }}>
-                {exercises.map((exercise) => (
-                    <li key={exercise.id}>
-                        <label>
-                            <input
-                                type="checkbox"
-                                checked={isExerciseSelected(exercise.id)}
-                                onChange={() => toggleExercise(exercise)}
-                            />
-                            {exercise.name}
-                        </label>
-                    </li>
-                ))}
-            </ul>
-        </div>
+        <Select
+            styles={styles}
+            options={exerciseOptions}
+            isMulti
+            value={selectedExercises.map((exercise) => ({
+                value: exercise.id,
+                label: exercise.name,
+            }))}
+            onChange={handleSelectChange}
+            placeholder="Выберите упражнения..."
+        />
     );
 };
 
