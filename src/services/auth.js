@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_URL = 'http://localhost:3000/auth/';
+const API_URL = 'https://fitness-server-tbwv.onrender.com/auth/';
 
 export const register = async (userData) => {
     try {

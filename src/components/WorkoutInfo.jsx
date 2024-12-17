@@ -7,13 +7,9 @@ const WorkoutInfo = ({ workout, onUpdate, onDelete }) => {
     const totalCalories = workout.exercises.reduce((sum, exercise) => sum + (exercise.calories_burned || 0), 0);
     const formattedDate = new Date(workout.date).toLocaleDateString('ru-RU');
 
-    // Функция для закрытия модального окна
-    const handleCloseModal = () => setIsModalOpen(false);
-
-    // Функция для обновления тренировки в родительском компоненте
     const handleUpdateWorkout = (updatedWorkout) => {
-        onUpdate(updatedWorkout); // Передаем обновленную тренировку родительскому компоненту
-        setIsModalOpen(false); // Закрываем модальное окно
+        onUpdate(updatedWorkout);
+        setIsModalOpen(false);
     };
 
     return (
@@ -41,7 +37,7 @@ const WorkoutInfo = ({ workout, onUpdate, onDelete }) => {
                 {isModalOpen && (
                     <EditWorkout
                         workout={workout}
-                        onClose={handleCloseModal}
+                        onClose={() => setIsModalOpen(false)}
                         onUpdate={handleUpdateWorkout}
                     />
                 )}

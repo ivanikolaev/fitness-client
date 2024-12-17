@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import api from '../services/api';
 
 function DeleteWorkout({ workout, onDelete }) {
-    const [loading, setLoading] = useState(false); // Для обработки загрузки
-    const [error, setError] = useState(null); // Для отображения ошибок
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState(null);
 
     const handleDeleteWorkout = async (id) => {
         setLoading(true);
@@ -17,7 +17,7 @@ function DeleteWorkout({ workout, onDelete }) {
                 headers: { Authorization: `Bearer ${token}` },
             });
 
-            onDelete(); // Уведомляем родительский компонент об удалении
+            onDelete();
         } catch (err) {
             setError(err.message || 'Ошибка при удалении тренировки');
         } finally {
@@ -30,7 +30,7 @@ function DeleteWorkout({ workout, onDelete }) {
             <button className="delete_button" onClick={() => handleDeleteWorkout(workout.id)} disabled={loading}>
                 {loading ? 'Удаление...' : 'Удалить'}
             </button>
-            {error && <p className="error">{error}</p>} {/* Показываем ошибку, если есть */}
+            {error && <p className="error">{error}</p>}
         </div>
     );
 }
